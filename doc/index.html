@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <title>Subset Sum ZK Game</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="flex items-center justify-center p-20">
+  <div class="container max-w-[600px] w-full flex flex-col py-8">
+    <h1 class="text-4xl">Subset Sum ZK Game</h1>
+    <p class="mt-8">
+      The Subset Sum game challenges players to select a subset of numbers from a given list to match a target sum. Utilizing zk-SNARKs for proof verification, the game ensures that player's solutions are correct without revealing the specific subset chosen, adding an extra layer of security and privacy. This combination of strategic thinking, problem-solving, and cryptographic technology offers an engaging way to explore mathematical concepts and logical reasoning.
+    </p>
+    <p class="my-4">
+      Can you find the right combination to solve the puzzle?
+    </p>
+    <div class="game w-full flex gap-8 my-8">
+      <div class="numbers-board w-4/5 grid grid-cols-3 gap-4"></div>
+      <div class="w-1/5">
+        <div class="current-board h-1/2 flex items-center justify-center bg-red-400 text-white px-5 text-xs">Current: <span>0</span></div>
+        <hr>
+        <div class="w-full target-board h-1/2 flex items-center justify-center bg-green-400 text-white text-xs">Target: <span>0</span></div>
+      </div>
+    </div>
+    <div class="w-full flex justify-between gap-2">
+      <button class="w-full bg-red-400 text-white h-8 reset-btn">RESET</button>
+    </div>
+  </div>
+  <script src="snarkjs.min.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
