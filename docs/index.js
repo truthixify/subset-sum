@@ -1,3 +1,12 @@
+let numbers = generateNumbers(9)
+let target = generateTarget(numbers)
+let current = 0
+let subset = Array(9).fill(0)
+
+const numbersBoard = document.querySelector(".numbers-board")
+const targetBoard = document.querySelector(".target-board span")
+const currentBoard = document.querySelector(".current-board span")
+
 addEventListener("DOMContentLoaded", () => {
   startGame()
 
@@ -6,7 +15,27 @@ addEventListener("DOMContentLoaded", () => {
 
 
   resetBtn.addEventListener("click", () => {
+    currentBoard.textContent = 0
+    currentBoard.parentElement.classList.remove("bg-green-400")
+    currentBoard.parentElement.classList.remove("bg-yellow-400")
+    currentBoard.parentElement.classList.add("bg-red-400")
+    numbers = generateNumbers(9)
+    target = generateTarget(numbers)
+    current = 0
+    subset = Array(9).fill(0)
     startGame()
+  })
+
+  submitBtn.addEventListener("click", async () => {
+    try {
+        const proof = await verifyProof(numbers, target, subset)
+
+        if (proof) {
+            alert("Valid proof")
+        }
+    } catch (error) {
+        alert("Invalid proof")
+    }
   })
 })
 
@@ -20,20 +49,11 @@ function generateTarget(numbers) {
 }
 
 async function startGame() {
-  let numbers = generateNumbers(9)
-  let target = generateTarget(numbers)
-  let current = 0
-  let subset = Array(9).fill(0)
-
-  const numbersBoard = document.querySelector(".numbers-board")
-  const targetBoard = document.querySelector(".target-board span")
-  const currentBoard = document.querySelector(".current-board span")
-
   numbersBoard.replaceChildren()
 
   numbers.forEach(num => {
     const numberHolder = document.createElement("p")
-    numberHolder.classList.add("number-holder", "border-2", "border-green-400", "text-green-400", "text-center")
+    numberHolder.classList.add("number-holder", "border-2", "border-green-400", "text-green-400", "text-center", "cursor-pointer")
 
     numberHolder.textContent = num
 
@@ -60,14 +80,10 @@ async function startGame() {
         currentBoard.parentElement.classList.remove("bg-yellow-400")
         currentBoard.parentElement.classList.remove("bg-red-400")
         currentBoard.parentElement.classList.add("bg-green-400")
-
-        verifyProof(numbers, target, subset).then(({out, proof}) => {
-          if (proof == true && out == 1) {
-            alert("You won!")
-          }
-        }).catch(err => {
-          alert(err)
-        })
+      } else if (current > target) {
+        currentBoard.parentElement.classList.remove("bg-yellow-400")
+        currentBoard.parentElement.classList.remove("bg-green-400")
+        currentBoard.parentElement.classList.add("bg-red-400")
       } else if (current > target / 2) {
         currentBoard.parentElement.classList.remove("bg-green-400")
         currentBoard.parentElement.classList.remove("bg-red-400")
@@ -98,5 +114,5 @@ async function verifyProof(numbers, target, subset) {
 
   const res = await snarkjs.groth16.verify(vkey, publicSignals, proof);
 
-  return { out: publicSignals[0], proof: res }
+  return res
 }
